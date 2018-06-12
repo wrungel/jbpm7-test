@@ -1,21 +1,24 @@
 package frol;
 
-import com.google.common.collect.Lists;
-import org.jbpm.services.api.DeploymentService;
-import org.jbpm.services.cdi.Kjar;
-import org.jbpm.services.cdi.Selectable;
-import org.jbpm.services.cdi.producer.UserGroupInfoProducer;
-import org.jbpm.services.task.audit.JPATaskLifeCycleEventListener;
-import org.jbpm.services.task.lifecycle.listeners.TaskLifeCycleEventListener;
-import org.kie.internal.identity.IdentityProvider;
-import org.kie.internal.task.api.UserInfo;
+import java.util.List;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
-import java.util.List;
+
+import org.jbpm.services.api.DeploymentService;
+import org.jbpm.services.cdi.Kjar;
+import org.jbpm.services.cdi.Selectable;
+import org.jbpm.services.cdi.producer.UserGroupInfoProducer;
+import org.jbpm.services.task.audit.JPATaskLifeCycleEventListener;
+import org.jbpm.services.task.lifecycle.listeners.TaskLifeCycleEventListener;
+import org.kie.api.task.UserGroupCallback;
+import org.kie.internal.identity.IdentityProvider;
+import org.kie.internal.task.api.UserInfo;
+
+import com.google.common.collect.Lists;
 
 public class EnvironmentProducer {
 
@@ -36,8 +39,24 @@ public class EnvironmentProducer {
     }
 
     @Produces
-    public org.kie.api.task.UserGroupCallback produceSelectedUserGroupCalback() {
-        return userGroupInfoProducer.produceCallback();
+    public UserGroupCallback produceSelectedUserGroupCalback() {
+        return new UserGroupCallback() {
+            @Override
+            public boolean existsUser(String userId) {
+                return true;
+            }
+
+            @Override
+            public boolean existsGroup(String groupId) {
+                return true;
+            }
+
+            @Override
+            public List<String> getGroupsForUser(String userId) {
+                return Lists.newArrayList();
+            }
+        };
+        //return userGroupInfoProducer.produceCallback();
     }
 
     @Produces
@@ -59,6 +78,7 @@ public class EnvironmentProducer {
     @Produces
     public IdentityProvider produceIdentityProvider() {
         return new IdentityProvider() {
+
             @Override
             public String getName() {
                 return "foo";

@@ -1,12 +1,13 @@
 package frol;
 
+import javax.transaction.TransactionSynchronizationRegistry;
+
 import org.jbpm.services.task.wih.LocalHTWorkItemHandler;
+import org.jbpm.services.task.wih.util.PeopleAssignmentHelper;
 import org.kie.api.runtime.process.WorkItem;
 import org.kie.api.runtime.process.WorkItemManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.transaction.TransactionSynchronizationRegistry;
 
 public class MyHTWorkItemHandler extends LocalHTWorkItemHandler {
     private static final Logger LOG = LoggerFactory.getLogger(MyHTWorkItemHandler.class);
@@ -19,6 +20,7 @@ public class MyHTWorkItemHandler extends LocalHTWorkItemHandler {
 
     @Override
     public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
+        workItem.getParameters().put(PeopleAssignmentHelper.ACTOR_ID, "foo, frol");
         Object txKey = txSynchronizationRegistry.getTransactionKey();
         LOG.info("txKey: " + txKey);
         super.executeWorkItem(workItem, manager);
