@@ -46,15 +46,34 @@
 
         <dependency>
             <groupId>org.jbpm</groupId>
+            <artifactId>jbpm-executor</artifactId>
+            <version>7.7.0.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jbpm</groupId>
             <artifactId>jbpm-services-cdi</artifactId>
             <version>7.7.0.Final</version>
         </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>org.jbpm</groupId>-->
+            <!--<artifactId>jbpm-executor-cdi</artifactId>-->
+            <!--<version>7.7.0.Final</version>-->
+        <!--</dependency>-->
 
         <!--Include guice-servlet as a workaround because sisu guice is missing servlet extension-->
         <dependency>
             <groupId>org.sonatype.sisu.inject</groupId>
             <artifactId>guice-servlet</artifactId>
             <version>3.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -65,6 +84,20 @@
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

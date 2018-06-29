@@ -20,7 +20,8 @@ public class MyHTWorkItemHandler extends LocalHTWorkItemHandler {
 
     @Override
     public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
-        workItem.getParameters().put(PeopleAssignmentHelper.ACTOR_ID, "foo, frol");
+        // alternative to <potentialOwner> XML bpmn tag:
+        // workItem.getParameters().put(PeopleAssignmentHelper.ACTOR_ID, "foo, frol");
         Object txKey = txSynchronizationRegistry.getTransactionKey();
         LOG.info("txKey: " + txKey);
         super.executeWorkItem(workItem, manager);

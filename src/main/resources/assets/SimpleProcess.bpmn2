@@ -8,20 +8,25 @@
              xmlns:drools="http://www.jboss.org/drools"
              xs:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
 >
+  <itemDefinition id="ItemDefinition_1" isCollection="false" structureRef="String"/>
 
-  <process processType="Private" isExecutable="true" id="frol.jbpm7test.SimpleTask" name="Hello World" >
+  <process processType="Private" isExecutable="true" id="frol.jbpm7test.SimpleProcess" name="Simple Process" drools:version="1" >
+
+    <!--<property id="currentUser" itemSubjectRef="ItemDefinition_1" name="currentUser"/>-->
 
     <!-- nodes -->
     <startEvent id="_1" name="StartProcess" />
 
-    <task id="_2" drools:taskName="Task1" drools:displayName="Task one" name="Task eins">
+    <task id="_2" drools:taskName="Task1" name="Task eins">
     </task>
 
     <userTask id="_3" drools:taskName="UserTask1" name="User Task 1">
+      <incoming>_2-_3</incoming>
+      <outgoing>_3-_4</outgoing>
     </userTask>
 
 
-    <task id="_4" drools:taskName="Task2" drools:displayName="Task two" name="Task zwei">
+    <task id="_4" drools:taskName="Task2" name="Task zwei">
     </task>
 
     <endEvent id="_5" name="EndProcess" >
@@ -31,7 +36,7 @@
     <!-- connections -->
     <sequenceFlow id="_1-_2" sourceRef="_1" targetRef="_2" />
     <sequenceFlow id="_2-_3" sourceRef="_2" targetRef="_3" />
-    <sequenceFlow id="_3-_4" sourceRef="_3" targetRef="_4" />
+    <sequenceFlow id="_3-_4" drools:priority="1" sourceRef="_3" targetRef="_4" />
     <sequenceFlow id="_4-_5" sourceRef="_4" targetRef="_5" />
   </process>
 </definitions>

@@ -1,20 +1,13 @@
 package frol;
 
-import java.util.HashMap;
-import java.util.List;
+import org.kie.api.task.TaskService;
+import org.kie.api.task.model.Task;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-
-import org.kie.api.task.TaskService;
-import org.kie.api.task.model.TaskSummary;
+import java.util.HashMap;
 
 @Path("/taskService")
 @Stateless
@@ -25,11 +18,11 @@ public class TaskRestService {
 
 
     @GET
-    @Path("/")
+    @Path("/{taskId}")
     @Produces({ "application/json" })
-    public List<TaskSummary> get(
-            @QueryParam("userId") String userId) {
-        return taskService.getTasksAssignedAsPotentialOwner(userId, null);
+    public Task get(
+            @PathParam("taskId") Long taskId) {
+        return taskService.getTaskById(taskId);
     }
 
     @POST
@@ -62,5 +55,13 @@ public class TaskRestService {
         return Response.ok().build();
     }
 
-
+    @POST
+    @Path("/{taskId}/exit")
+    @Produces({ "application/json" })
+    public Response exit(
+            @PathParam("taskId") Long taskId,
+            @QueryParam("userId") String userId) {
+        taskService.exit(taskId, userId);
+        return Response.ok().build();
+    }
 }
